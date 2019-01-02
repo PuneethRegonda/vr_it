@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:vr_it/common/platform_button.dart';
 import 'package:vr_it/ui/firebase_login.dart';
 
@@ -13,8 +14,6 @@ class BottomButtonsAppIntro extends StatefulWidget {
     return BottomButtonsAppIntroState();
   }
 }
-
-//![Sample App Intro Demo][700x350,40%](./simple_app_intro.gif)
 
 class BottomButtonsAppIntroState extends State<BottomButtonsAppIntro> {
   double width, height;
@@ -77,7 +76,7 @@ class BottomButtonsAppIntroState extends State<BottomButtonsAppIntro> {
             ),
           ),
           Positioned(
-            bottom: height * 2.25 / 10,
+            bottom: MediaQuery.of(context).orientation == Orientation.portrait ? height * 2/ 10 : height*2.30/10,
             right: 0.0,
             left: 0.0,
             child: Center(
@@ -105,22 +104,26 @@ class BottomButtonsAppIntroState extends State<BottomButtonsAppIntro> {
               child: Text(
                 'Login with OTP',
                 textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white,fontSize: MediaQuery.of(context).orientation == Orientation.portrait? height*0.225/10 : height*0.3/10 ,fontStyle: FontStyle.normal,decorationColor: Colors.white),
+                style: TextStyle(color: Colors.white,fontSize: MediaQuery.of(context).orientation == Orientation.portrait? height*0.225/10 : height*0.32/10 ,fontStyle: FontStyle.normal,decorationColor: Colors.white),
               ),
             ),
           ),
           color: Colors.blue,
           onPressed: () {
             //debugPrint('lets login');
-            Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => FirebaseLogin()));
+//            Navigator.of(context).push(
+//                MaterialPageRoute(builder: (context) => FirebaseLogin()));
+            Navigator.of(context).pushReplacement( MaterialPageRoute(builder: (context) => FirebaseLogin()));
+//            Navigator.of(context).push(
+//                MaterialPageRoute(builder: (context) => FirebaseLogin()));
+//            Navigator.of(context).popAndPushNamed('login',)
           },
         ),
         SizedBox(
           height: height*0.25/10,
         ),
         InkWell(
-          child: Text('Terms and Conditions',textAlign: TextAlign.center,style: TextStyle(fontSize: MediaQuery.of(context).orientation == Orientation.portrait ? height*0.202/10 : height*0.28/10),),
+          child: Text('Terms and Conditions',textAlign: TextAlign.center,style: TextStyle(fontSize: MediaQuery.of(context).orientation == Orientation.portrait ? height*0.202/10 : height*0.30/10),),
           onTap: (){
             debugPrint('Go to agreement page');
           },
@@ -193,9 +196,9 @@ class Page extends StatelessWidget {
     _height = MediaQuery.of(context).size.height;
 
     TextStyle titleStyle = new TextStyle(
-        color: Colors.black87, fontSize: MediaQuery.of(context).orientation == Orientation.portrait ? 28.0 : 18.0, fontWeight: FontWeight.w700);
+        color: Colors.black87, fontSize: MediaQuery.of(context).orientation == Orientation.portrait ? _height*0.41/10 : _height*.55/10, fontWeight: FontWeight.w700);
     TextStyle desc = new TextStyle(
-        color: Colors.grey, fontSize: MediaQuery.of(context).orientation == Orientation.portrait ? 20.0 : 13.5, fontWeight: FontWeight.w400);
+        color: Colors.grey, fontSize: MediaQuery.of(context).orientation == Orientation.portrait ? _height*0.25/10 : _height*0.35/10, fontWeight: FontWeight.w400);
 
     return Scaffold(
         backgroundColor: backgroundColor,

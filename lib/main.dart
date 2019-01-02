@@ -6,15 +6,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 void main() {
   FirebaseAuth _auth = FirebaseAuth.instance;
-  if (_auth.currentUser() != null) {
-    runApp(MaterialApp(
-      //user signed in
-      home: BottomButtonsAppIntro(),
-    ));
-  } else {
-    runApp(MaterialApp(
-      //user not signed in
-      home: FirebaseLogin(),
-    ));
-  }
+  runApp(MaterialApp(
+    //user signed in
+    title: 'VR IT Groups',
+    home: _auth.currentUser() != null
+        ? BottomButtonsAppIntro()
+        : FirebaseLogin(),
+    debugShowCheckedModeBanner: false,
+  ));
 }
