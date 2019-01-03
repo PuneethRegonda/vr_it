@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
+import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:vr_it/common/platform_button.dart';
@@ -99,7 +100,7 @@ class BottomButtonsAppIntroState extends State<BottomButtonsAppIntro> {
         PlatformButton(
           child: SizedBox(
             width: width*9/10,
-            height: height*.7/10,
+            height: Platform.isAndroid ? height*.7/10 : height*.4/10,
             child: Center(
               child: Text(
                 'Login with OTP',

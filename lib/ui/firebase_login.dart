@@ -91,7 +91,7 @@ class FirebaseLoginState extends State<FirebaseLogin> {
                           PlatformButton(
                             child: SizedBox(
                               width: _width * 5 / 10,
-                              height: _height * .6 / 10,
+                              height: Platform.isAndroid ? _height * .6 / 10 : _height*.3/10 ,
                               child: Center(
                                 child: Text(
                                   'Get Verification Code',
@@ -353,7 +353,7 @@ class VerifyPhoneState extends State<VerifyPhone> {
                             PlatformButton(
                               child: SizedBox(
                                 width: _width * 3 / 10,
-                                height: _height * .6 / 10,
+                                height: Platform.isAndroid ? _height * .6 / 10 : _height*.3/10,
                                 child: Center(
                                   child: Text(
                                     'Verify Code',
@@ -386,7 +386,7 @@ class VerifyPhoneState extends State<VerifyPhone> {
                             PlatformButton(
                               child: SizedBox(
                                 width: _width * 3 / 10,
-                                height: _height * .6 / 10,
+                                height: Platform.isAndroid ? _height * .6 / 10 : _height*.3/10,
                                 child: Center(
                                   child: Text(
                                     'Resend Code',
