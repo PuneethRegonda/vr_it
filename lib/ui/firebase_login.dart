@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:vr_it/common/platform_button.dart';
 import 'dart:io';
-
 import 'dart:async';
 import 'package:vr_it/ui/bottom_option_app_intro.dart';
 
@@ -31,6 +30,7 @@ class FirebaseLoginState extends State<FirebaseLogin> {
 
     return Scaffold(
         appBar: AppBar(
+            centerTitle: true,
             title: Text(
               'Login',
             ),
@@ -60,8 +60,11 @@ class FirebaseLoginState extends State<FirebaseLogin> {
                     height: _orientation == Orientation.portrait
                         ? _height * 4 / 10
                         : _height * 3 / 10,
-                    child: Image.asset(
-                      'assets/vr_it_logo.png',
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 20.0, right: 20.0),
+                      child: Image.asset(
+                        'assets/vr_it_logo.png',
+                      ),
                     ),
                   ),
                 ),
@@ -91,7 +94,9 @@ class FirebaseLoginState extends State<FirebaseLogin> {
                           PlatformButton(
                             child: SizedBox(
                               width: _width * 5 / 10,
-                              height: Platform.isAndroid ? _height * .6 / 10 : _height*.3/10 ,
+                              height: Platform.isAndroid
+                                  ? _height * .6 / 10
+                                  : _height * .3 / 10,
                               child: Center(
                                 child: Text(
                                   'Get Verification Code',
@@ -314,8 +319,11 @@ class VerifyPhoneState extends State<VerifyPhone> {
                       MediaQuery.of(context).orientation == Orientation.portrait
                           ? _height * 4 / 10
                           : _height * 3 / 10,
-                  child: Image.asset(
-                    'assets/vr_it_logo.png',
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 20.0, right: 20.0),
+                    child: Image.asset(
+                      'assets/vr_it_logo.png',
+                    ),
                   ),
                 ),
               ),
@@ -353,7 +361,9 @@ class VerifyPhoneState extends State<VerifyPhone> {
                             PlatformButton(
                               child: SizedBox(
                                 width: _width * 3 / 10,
-                                height: Platform.isAndroid ? _height * .6 / 10 : _height*.3/10,
+                                height: Platform.isAndroid
+                                    ? _height * .6 / 10
+                                    : _height * .3 / 10,
                                 child: Center(
                                   child: Text(
                                     'Verify Code',
@@ -386,7 +396,9 @@ class VerifyPhoneState extends State<VerifyPhone> {
                             PlatformButton(
                               child: SizedBox(
                                 width: _width * 3 / 10,
-                                height: Platform.isAndroid ? _height * .6 / 10 : _height*.3/10,
+                                height: Platform.isAndroid
+                                    ? _height * .6 / 10
+                                    : _height * .3 / 10,
                                 child: Center(
                                   child: Text(
                                     'Resend Code',
