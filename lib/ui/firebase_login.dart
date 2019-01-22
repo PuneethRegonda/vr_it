@@ -4,12 +4,40 @@ import 'package:vr_it/common/platform_button.dart';
 import 'dart:io';
 import 'dart:async';
 import 'package:vr_it/ui/bottom_option_app_intro.dart';
+import 'package:universal_widget/universal_widget.dart';
+import 'package:vr_it/home.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final _formKey = GlobalKey<FormState>();
 final _formKeyVerify = GlobalKey<FormState>();
 final snackBar =
     SnackBar(content: Text('User verification completed succesfully'));
+
+var _bar = Center(child: CircularProgressIndicator());
+
+//Container(
+// height: 150.0,
+// width: 150.0,
+// child: Center(
+//   child: Scaffold(
+//     backgroundColor: Colors.white,
+//     body: Center(
+//       child: Column(
+//         children: <Widget>[
+//           CircularProgressIndicator(),
+//           SizedBox(
+//             height: 15.0,
+//           ),
+//           Text('Loading...',style: TextStyle(color: Colors.blue,fontSize: 22.0),)
+//         ],
+//       ),
+//     ),
+//   ),
+// ),
+//    decoration: ShapeDecoration(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0))),
+//);
+
+UniversalWidget _progress = new UniversalWidget(child: CircularProgressIndicator());
 
 double _width, _height;
 var _phone, _code, _verificationId, _orientation;
@@ -51,12 +79,9 @@ class FirebaseLoginState extends State<FirebaseLogin> {
             child: Column(
               children: <Widget>[
                 SizedBox(
-                  height: _orientation == Orientation.portrait
-                      ? _height * 0.5 / 10
-                      : _height * 0.25 / 10,
+                  height:_height * 0.25 / 10,
                 ),
-                Center(
-                  child: SizedBox(
+                SizedBox(
                     height: _orientation == Orientation.portrait
                         ? _height * 4 / 10
                         : _height * 3 / 10,
@@ -67,7 +92,6 @@ class FirebaseLoginState extends State<FirebaseLogin> {
                       ),
                     ),
                   ),
-                ),
                 SizedBox(
                   child: Text(
                     'Please enter your mobile number to continue',
@@ -197,8 +221,9 @@ class VerifyPhoneState extends State<VerifyPhone> {
       this._verificationId = verificationId;
       _statusOfVerification =
           'Verification code has been sent to your mobile, please enter it to continue';
+      _progress.update(visible: false);
     });
-    debugPrint('Phone verification code sent');
+//    debugPrint('Phone verification code sent');
   }
 
   // PhoneCodeAutoRetrievalTimeout
@@ -210,7 +235,10 @@ class VerifyPhoneState extends State<VerifyPhone> {
   }
 
   Future<Null> _submitSmsCode() async {
-    debugPrint('Phone verification submit sms code');
+    setState(() {
+      _progress.update(visible: true);
+    });
+//    debugPrint('Phone verification submit sms code');
     if (this._codeVerified) {
       await _finishSignIn(await _auth.currentUser());
     } else {
@@ -220,6 +248,9 @@ class VerifyPhoneState extends State<VerifyPhone> {
   }
 
   Future<void> _signInWithPhoneNumber() async {
+    setState(() {
+      _progress.update(visible: true);
+    });
     await _auth
         .signInWithPhoneNumber(verificationId: _verificationId, smsCode: _code)
         .then((user) async {
@@ -229,11 +260,17 @@ class VerifyPhoneState extends State<VerifyPhone> {
           await _finishSignIn(user);
         } else {
           _statusOfVerification = 'Phone verification failed, please try later';
+          setState(() {
+            _progress.update(visible: false);
+          });
         }
       });
     }, onError: (error) {
       _statusOfVerification = 'Phone verification failed, please try later';
-      print("Failed to verify SMS code: $error");
+//      print("Failed to verify SMS code: $error");
+      setState(() {
+        _progress.update(visible: false);
+      });
     });
   }
 
@@ -244,9 +281,13 @@ class VerifyPhoneState extends State<VerifyPhone> {
       setState(() {
         _statusOfVerification = 'Verification success';
       });
+//      _signInSuccess();
     } else {
       _statusOfVerification = 'Phone verification failed, please try later';
     }
+    setState(() {
+      _progress.update(visible: false);
+    });
     return isUserValid;
   }
 
@@ -265,24 +306,39 @@ class VerifyPhoneState extends State<VerifyPhone> {
 
   // PhoneVerificationFailed
   verificationFailed(AuthException authException) {
-    debugPrint('Phone verification failed ' + authException.message);
-    _statusOfVerification = 'Phone verification failed, please try later';
+//    debugPrint('Phone verification failed ' + authException.message);
+    _statusOfVerification = 'Phone verification failed, please try later + ${authException.message}';
 //    SnackBar(content: Text("We couldn't verify your code for now, please try again!"));
+    setState(() {
+      _progress.update(visible: false);
+    });
   }
 
   _finishSignIn(FirebaseUser user) async {
     await _onCodeVerified(user).then((result) {
       if (result) {
-        debugPrint('Sigin in success');
+//        debugPrint('Sigin in success');
         _statusOfVerification = 'Verification success';
-        Scaffold.of(context).showSnackBar(snackBar);
+//        Scaffold.of(context).showSnackBar(snackBar);
+        setState(() {
+          _progress.update(visible: false);
+        });
+        _signInSuccess();
       } else {
         setState(() {
           _statusOfVerification = 'Phone verification failed, please try later';
+            _progress.update(visible: false);
         });
-        debugPrint('Sigin in failed');
+//        debugPrint('Sigin in failed');
       }
     });
+  }
+
+  _signInSuccess() async{
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    debugPrint(user.uid);
+    Navigator.pushReplacement(context,
+        MaterialPageRoute(builder: (context) => Home()));
   }
 
   @override
@@ -290,6 +346,7 @@ class VerifyPhoneState extends State<VerifyPhone> {
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text(
           'Login',
         ),
@@ -310,11 +367,10 @@ class VerifyPhoneState extends State<VerifyPhone> {
               SizedBox(
                 height:
                     MediaQuery.of(context).orientation == Orientation.portrait
-                        ? _height * 0.5 / 10
+                        ? _height * 0.25 / 10
                         : _height * 0.25 / 10,
               ),
-              Center(
-                child: SizedBox(
+              SizedBox(
                   height:
                       MediaQuery.of(context).orientation == Orientation.portrait
                           ? _height * 4 / 10
@@ -326,21 +382,23 @@ class VerifyPhoneState extends State<VerifyPhone> {
                     ),
                   ),
                 ),
-              ),
+              _progress,
               SizedBox(
                   height: _height * 0.75 / 10,
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                      left: 30.0,
-                      right: 30.0,
-                    ),
-                    child: Text(
-                      '$_statusOfVerification',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontSize: _orientation == Orientation.portrait
-                              ? _height * 0.225 / 10
-                              : _height * 0.35 / 10),
+                  child: Center(
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        left: 30.0,
+                        right: 30.0,
+                      ),
+                      child: Text(
+                        '$_statusOfVerification',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: _orientation == Orientation.portrait
+                                ? _height * 0.225 / 10
+                                : _height * 0.35 / 10),
+                      ),
                     ),
                   )),
               Form(
@@ -420,6 +478,7 @@ class VerifyPhoneState extends State<VerifyPhone> {
                                 setState(() {
                                   _statusOfVerification =
                                       'Verification code has been resent';
+                                  _progress.update(visible: true);
                                   _verifyPhoneNumber();
                                 });
                               },

@@ -55,6 +55,7 @@ flutter:
     - assets/projects.png
     - assets/software_management.png
     - assets/tech_support.png
+    - assets/girl.jpg
   #  - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

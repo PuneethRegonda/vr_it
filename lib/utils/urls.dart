@@ -16,7 +16,6 @@ class Urls{
       getTechSupports = _root+ "get_tech_supports.php",
       getTechSupport = _root+ "get_tech_support.php"
 
-
   ;
 
 }

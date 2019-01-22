@@ -11,6 +11,7 @@ import 'package:dots_indicator/dots_indicator.dart';
 import 'package:vr_it/utils/urls.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:vr_it/ui/our_services.dart';
+import 'package:vr_it/ui/play_video.dart';
 
 var orientation, height, width;
 
@@ -52,12 +53,17 @@ class HomeState extends State<Home> {
               backgroundColor: Colors.blue),
           BottomNavigationBarItem(
               icon: Icon(Icons.class_),
-              title: Text('My Activity'),
+              title: Text('Classroom'),
               //activeIcon: Icon(Icons.class_,color: Colors.black,),
               backgroundColor: Colors.blue),
           BottomNavigationBarItem(
-              icon: Icon(Icons.book),
-              title: Text('Documents'),
+              icon: Icon(Icons.business_center),
+              title: Text('Projects'),
+              //  activeIcon: Icon(Icons.book,color: Colors.black,),
+              backgroundColor: Colors.blue),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.group_work),
+              title: Text('Internships'),
               //  activeIcon: Icon(Icons.book,color: Colors.black,),
               backgroundColor: Colors.blue),
         ],
@@ -99,14 +105,16 @@ class HomeState extends State<Home> {
     } else if (_currentIndex == 1) {
       return MyProfile();
     } else if (_currentIndex == 2) {
-      return Center(
-        child: Text('your activity'),
-      );
+      return VideoApp();
     } else if (_currentIndex == 3) {
       return Center(
-        child: Text('your classroom'),
+        child: Text('Your Projects will appear here'),
       );
-    } else {
+    } else if (_currentIndex == 3) {
+        return Center(
+          child: Text('Your Internships/Industrial Trainings will appear here'),
+        );
+    }else{
       return Center();
     }
   }
